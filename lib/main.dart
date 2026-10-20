@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
 
-// Ketentuan 2 & 3: Model data dengan 4 field berbeda tipe (String, int, double, bool)
-// serta menggunakan variabel final.
 class LabAssistant {
   final String name;
   final int studentId;
@@ -18,7 +16,6 @@ class LabAssistant {
   });
 }
 
-// Ketentuan 1: Hanya SATU MaterialApp di dalam MyApp.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -26,7 +23,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // Ketentuan 5: Tema warna baru, menggunakan Teal (bukan Indigo)
       theme: ThemeData(
         primarySwatch: Colors.teal,
         scaffoldBackgroundColor: Colors.grey.shade100,
@@ -41,15 +37,13 @@ class LayarUtama extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Ketentuan 2: Objek berisi datamu sendiri (Hanif)
     const myProfile = LabAssistant(
       name: "Muhammad Hanif Nuruddin Jabbar",
       studentId: 202432042,
-      performanceScore: 4.0, // Tipe double
-      isActive: true,        // Tipe bool
+      performanceScore: 4.0,
+      isActive: true,
     );
 
-    // Ketentuan 1: Halaman utama langsung memakai Scaffold, TANPA MaterialApp kedua
     return Scaffold(
       appBar: AppBar(
         title: const Text('Portal SEIC Lab'),
@@ -57,10 +51,8 @@ class LayarUtama extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: Center(
-        // SingleChildScrollView mencegah layar overflow jika dibuka di device sempit (Ketentuan 7)
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          // Ketentuan 6: Tampilan dipecah menjadi custom widget terpisah
           child: ProfileCard(assistant: myProfile),
         ),
       ),
@@ -68,7 +60,6 @@ class LayarUtama extends StatelessWidget {
   }
 }
 
-// Ketentuan 6: Custom widget terpisah untuk Kartu Ringkasan
 class ProfileCard extends StatelessWidget {
   final LabAssistant assistant;
 
@@ -76,27 +67,21 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Ketentuan 4: Memakai widget Card
     return Card(
       elevation: 6,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      // Ketentuan 4: Memakai Container dengan BoxDecoration
       child: Container(
-        padding: const EdgeInsets.all(24), // Ketentuan 4: Memakai Padding
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Colors.teal.shade50,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.teal.shade300, width: 1.5),
         ),
-        // Ketentuan 4: Memakai Column
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Ketentuan 4: Memakai Icon
             const Icon(Icons.badge, size: 60, color: Colors.teal),
-            // Ketentuan 4: Memakai SizedBox
             const SizedBox(height: 16),
-            // Ketentuan 4: Memakai Text
             Text(
               assistant.name,
               textAlign: TextAlign.center,
@@ -112,7 +97,6 @@ class ProfileCard extends StatelessWidget {
               style: const TextStyle(fontSize: 16, color: Colors.black54),
             ),
             const SizedBox(height: 24),
-            // Ketentuan 4: Memakai Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -129,7 +113,6 @@ class ProfileCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            // Ketentuan 4: Memakai ElevatedButton dengan callback onPressed
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.teal,
@@ -140,7 +123,6 @@ class ProfileCard extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                // Callback ketika tombol ditekan
                 debugPrint("ABSENSI DICATAT UNTUK: ${assistant.studentId}");
               },
               child: const Text(
@@ -154,7 +136,6 @@ class ProfileCard extends StatelessWidget {
     );
   }
 
-  // Helper kecil untuk menyusun item di dalam Row agar kode lebih rapi
   Widget _buildInfoItem(IconData icon, String label, String value) {
     return Column(
       children: [
