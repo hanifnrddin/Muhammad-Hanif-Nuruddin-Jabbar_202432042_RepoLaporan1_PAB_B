@@ -19,7 +19,7 @@ class Kereta {
   });
 }
 
-// ===== MyApp: satu-satunya MaterialApp =====
+// ===== MyApp =====
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// ===== Halaman utama: Scaffold tanpa MaterialApp kedua =====
+// ===== Halaman utama =====
 class LayarUtama extends StatelessWidget {
   const LayarUtama({super.key});
 
