@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
 
-class LabAssistant {
-  final String name;
-  final int studentId;
-  final double performanceScore;
-  final bool isActive;
+// ===== Model data =====
+class Kereta {
+  final String nama; // String
+  final String rute; // String
+  final int jumlahGerbong; // int
+  final double kecepatan; // double (km/jam)
+  final bool isEksekutif; // bool
 
-  const LabAssistant({
-    required this.name,
-    required this.studentId,
-    required this.performanceScore,
-    required this.isActive,
+  const Kereta({
+    required this.nama,
+    required this.rute,
+    required this.jumlahGerbong,
+    required this.kecepatan,
+    required this.isEksekutif,
   });
 }
 
+// ===== MyApp: satu-satunya MaterialApp =====
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -24,136 +28,166 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.grey.shade100,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        useMaterial3: true,
       ),
       home: const LayarUtama(),
     );
   }
 }
 
+// ===== Halaman utama: Scaffold tanpa MaterialApp kedua =====
 class LayarUtama extends StatelessWidget {
   const LayarUtama({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const myProfile = LabAssistant(
-      name: "Muhammad Hanif Nuruddin Jabbar",
-      studentId: 202432042,
-      performanceScore: 4.0,
-      isActive: true,
+    const keretaSaya = Kereta(
+      nama: "Argo Bromo Anggrek",
+      rute: "Gambir - Surabaya Pasar Turi",
+      jumlahGerbong: 10,
+      kecepatan: 120.5,
+      isEksekutif: true,
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Portal SEIC Lab'),
+        title: const Text('Katalog Kereta Api'),
         backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: ProfileCard(assistant: myProfile),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.teal.shade50,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: [
+                    const Icon(Icons.train, size: 48, color: Colors.teal),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Jelajahi Kereta Indonesia',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.teal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              KartuKereta(kereta: keretaSaya),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class ProfileCard extends StatelessWidget {
-  final LabAssistant assistant;
+// ===== Custom widget: kartu informasi kereta =====
+class KartuKereta extends StatelessWidget {
+  final Kereta kereta;
 
-  const ProfileCard({super.key, required this.assistant});
+  const KartuKereta({super.key, required this.kereta});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 6,
+      elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.teal.shade50,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.teal.shade300, width: 1.5),
-        ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.badge, size: 60, color: Colors.teal),
-            const SizedBox(height: 16),
-            Text(
-              assistant.name,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'NIM: ${assistant.studentId}',
-              style: const TextStyle(fontSize: 16, color: Colors.black54),
-            ),
-            const SizedBox(height: 24),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildInfoItem(
-                    Icons.star, 
-                    'Rating', 
-                    assistant.performanceScore.toString()
-                ),
-                _buildInfoItem(
-                    Icons.work_history, 
-                    'Status', 
-                    assistant.isActive ? "Aktif" : "Cuti"
+                const Icon(Icons.directions_railway, color: Colors.teal),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    kereta.nama,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            const SizedBox(height: 8),
+            Text(
+              kereta.rute,
+              style: const TextStyle(fontSize: 14, color: Colors.black54),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _Info(ikon: Icons.view_week, teks: '${kereta.jumlahGerbong} gerbong'),
+                _Info(ikon: Icons.speed, teks: '${kereta.kecepatan} km/jam'),
+                _Info(
+                  ikon: Icons.star,
+                  teks: kereta.isEksekutif ? 'Eksekutif' : 'Ekonomi',
                 ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  debugPrint("TOMBOL DIKLIK: ${kereta.nama}");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${kereta.nama} ditambahkan ke favorit')),
+                  );
+                },
+                child: const Text("Tambah ke Favorit"),
               ),
-              onPressed: () {
-                debugPrint("ABSENSI DICATAT UNTUK: ${assistant.studentId}");
-              },
-              child: const Text(
-                "Catat Kehadiran Asisten",
-                style: TextStyle(fontSize: 16),
-              ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildInfoItem(IconData icon, String label, String value) {
-    return Column(
-      children: [
-        Icon(icon, color: Colors.teal.shade700, size: 26),
-        const SizedBox(height: 6),
-        Text(
-          label, 
-          style: const TextStyle(fontSize: 12, color: Colors.black54)
-        ),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.teal,
-          ),
-        ),
-      ],
+// ===== Custom widget kecil: chip informasi =====
+class _Info extends StatelessWidget {
+  final IconData ikon;
+  final String teks;
+
+  const _Info({required this.ikon, required this.teks});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.teal.shade100,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(ikon, size: 16, color: Colors.teal.shade900),
+          const SizedBox(width: 4),
+          Text(teks, style: TextStyle(color: Colors.teal.shade900)),
+        ],
+      ),
     );
   }
 }
